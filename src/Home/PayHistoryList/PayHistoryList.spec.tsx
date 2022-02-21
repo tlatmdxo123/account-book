@@ -9,8 +9,8 @@ jest.mock("react-redux", () => ({
 }));
 
 jest.mock("./PayHistoryItem", () => ({
-  PayHistoryItem: ({ history }: PayHistoryItemProps) => (
-    <div>{`${history.content} ${history.amount}`}</div>
+  PayHistoryItem: ({ payHistory }: PayHistoryItemProps) => (
+    <div>{`${payHistory.content} ${payHistory.amount}`}</div>
   ),
 }));
 

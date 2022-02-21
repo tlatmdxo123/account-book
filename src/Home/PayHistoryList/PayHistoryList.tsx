@@ -14,7 +14,7 @@ export const PayHistoryList = () => {
   return (
     <div>
       {filteredHistories.map((history) => (
-        <PayHistoryItem history={history} key={history.id} />
+        <PayHistoryItem payHistory={history} key={history.id} />
       ))}
     </div>
   );
