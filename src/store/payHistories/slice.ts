@@ -1,7 +1,7 @@
 import { PayHistory } from "../../types/history";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "..";
-import { sum } from "../../utils";
+import { sum } from "../../utils/helpers";
 
 const initialState: PayHistory[] = [];
 

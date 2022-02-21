@@ -1,4 +1,4 @@
-import { sum } from "./utils";
+import { sum } from "./helpers";
 
 describe("utils", () => {
   describe("sum", () => {
