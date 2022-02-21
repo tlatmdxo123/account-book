@@ -1,3 +1,11 @@
+import { AmountSum } from "./AmountSum";
+import { DateFilter } from "./DateFilter";
+
 export const Header = () => {
-  return <div></div>;
+  return (
+    <div>
+      <AmountSum />
+      <DateFilter />
+    </div>
+  );
 };
