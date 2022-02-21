@@ -6,6 +6,6 @@ export type PayHistory = {
   id: string;
   amount: number;
   date: DateString;
-  categories: Category[];
+  category: Category;
   content: string;
 };

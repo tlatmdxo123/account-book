@@ -15,7 +15,7 @@ describe("PayHistory Reducer", () => {
     amount: 5100,
     content: "커피",
     date: new Date().toString(),
-    categories: ["카페", "외식"],
+    category: "카페",
   };
   it("add list", () => {
     const previousState: PayHistory[] = [];
@@ -36,7 +36,7 @@ describe("PayHistory Reducer", () => {
       amount: 4000,
       content: "커피",
       date: history.date,
-      categories: ["카페"],
+      category: "카페",
     };
 
     expect(payHistories(previousState, editHistory(editedHistory))).toEqual([
@@ -51,21 +51,21 @@ describe("PayHistory Reducer", () => {
         amount: 4000,
         content: "커피",
         date: history.date,
-        categories: ["카페"],
+        category: "카페",
       },
       {
         id: "b",
         amount: 5200,
         content: "커피",
         date: history.date,
-        categories: ["카페"],
+        category: "카페",
       },
       {
         id: "c",
         amount: 3000,
         content: "커피",
         date: history.date,
-        categories: ["카페"],
+        category: "카페",
       },
     ];
     it("select pay histories amount sum", () => {

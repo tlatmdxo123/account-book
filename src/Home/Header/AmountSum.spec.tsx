@@ -19,21 +19,21 @@ describe("AmountSum", () => {
         amount: 4000,
         content: "커피",
         date: new Date().toString(),
-        categories: ["카페"],
+        category: "카페",
       },
       {
         id: "b",
         amount: 5200,
         content: "커피",
         date: new Date().toString(),
-        categories: ["카페"],
+        category: "카페",
       },
       {
         id: "c",
         amount: 3000,
         content: "커피",
         date: new Date().toString(),
-        categories: ["카페"],
+        category: "카페",
       },
     ];
     useSelectorMock.mockImplementation((selector) =>
