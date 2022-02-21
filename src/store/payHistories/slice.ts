@@ -1,5 +1,7 @@
 import { PayHistory } from "../../types/history";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "..";
+import { sum } from "../../utils";
 
 const initialState: PayHistory[] = [];
 
@@ -32,3 +34,5 @@ const slice = createSlice({
 
 export const payHistories = slice.reducer;
 export const { addHistory, editHistory, deleteHistory } = slice.actions;
+export const selectPayHistoriesAmountSum = (state: RootState) =>
+  state.payHistories.map((history) => history.amount).reduce(sum);
