@@ -1,9 +1,11 @@
+import { DateString } from "../store/selectedDate";
+
 export type Category = string;
 
 export type PayHistory = {
   id: string;
   amount: number;
-  date: Date;
+  date: DateString;
   categories: Category[];
   content: string;
 };
