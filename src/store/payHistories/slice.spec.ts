@@ -3,6 +3,7 @@ import {
   deleteHistory,
   editHistory,
   payHistories,
+  selectPayHistories,
   selectPayHistoriesAmountSum,
 } from ".";
 import { RootState } from "..";
@@ -13,7 +14,7 @@ describe("PayHistory Reducer", () => {
     id: "a",
     amount: 5100,
     content: "커피",
-    date: new Date(),
+    date: new Date().toString(),
     categories: ["카페", "외식"],
   };
   it("add list", () => {
@@ -44,32 +45,37 @@ describe("PayHistory Reducer", () => {
   });
 
   describe("selectors", () => {
+    const payHistories: PayHistory[] = [
+      {
+        id: "a",
+        amount: 4000,
+        content: "커피",
+        date: history.date,
+        categories: ["카페"],
+      },
+      {
+        id: "b",
+        amount: 5200,
+        content: "커피",
+        date: history.date,
+        categories: ["카페"],
+      },
+      {
+        id: "c",
+        amount: 3000,
+        content: "커피",
+        date: history.date,
+        categories: ["카페"],
+      },
+    ];
     it("select pay histories amount sum", () => {
-      const payHistories: PayHistory[] = [
-        {
-          id: "a",
-          amount: 4000,
-          content: "커피",
-          date: history.date,
-          categories: ["카페"],
-        },
-        {
-          id: "b",
-          amount: 5200,
-          content: "커피",
-          date: history.date,
-          categories: ["카페"],
-        },
-        {
-          id: "c",
-          amount: 3000,
-          content: "커피",
-          date: history.date,
-          categories: ["카페"],
-        },
-      ];
       const sum = selectPayHistoriesAmountSum({ payHistories } as RootState);
       expect(sum).toBe(12200);
+    });
+
+    it("select pay histories", () => {
+      const result = selectPayHistories({ payHistories } as RootState);
+      expect(result).toEqual(payHistories);
     });
   });
 });

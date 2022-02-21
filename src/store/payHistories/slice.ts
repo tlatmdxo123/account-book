@@ -36,3 +36,5 @@ export const payHistories = slice.reducer;
 export const { addHistory, editHistory, deleteHistory } = slice.actions;
 export const selectPayHistoriesAmountSum = (state: RootState) =>
   state.payHistories.map((history) => history.amount).reduce(sum);
+
+export const selectPayHistories = (state: RootState) => state.payHistories;
