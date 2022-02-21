@@ -1,3 +1,13 @@
+import { useHistory } from "react-router-dom";
+
 export const AddButton = () => {
-  return <div></div>;
+  const history = useHistory();
+  function onClickModalOpen() {
+    history.push("?open=true");
+  }
+  return (
+    <div>
+      <button onClick={onClickModalOpen}></button>
+    </div>
+  );
 };

@@ -1,7 +1,6 @@
 import { render } from "@testing-library/react";
 import { useSelector } from "react-redux";
 import { PayHistoryList } from ".";
-import { PayHistory } from "../../types/history";
 import { PayHistoryItemProps } from "./PayHistoryItem";
 
 jest.mock("react-redux", () => ({
