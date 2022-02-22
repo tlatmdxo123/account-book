@@ -20,7 +20,9 @@ describe("PayHistory Reducer", () => {
   it("add list", () => {
     const previousState: PayHistory[] = [];
 
-    expect(payHistories(previousState, addHistory(history))).toEqual([history]);
+    expect(payHistories(previousState, addHistory([history]))).toEqual([
+      history,
+    ]);
   });
 
   it("delete list", () => {

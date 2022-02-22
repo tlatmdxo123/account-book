@@ -11,9 +11,9 @@ const slice = createSlice({
   reducers: {
     addHistory(
       state: PayHistory[] = initialState,
-      action: PayloadAction<PayHistory>
+      action: PayloadAction<PayHistory[]>
     ) {
-      state.push(action.payload);
+      state.push(...action.payload);
     },
     editHistory(
       state: PayHistory[] = initialState,
