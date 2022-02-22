@@ -11,6 +11,7 @@ export const PayHistoryList = () => {
   const filteredHistories = payHistories.filter((history) =>
     isSameYearAndMonth(history.date, selectedDate)
   );
+  if (filteredHistories.length === 0) return <div>empty</div>;
   return (
     <div>
       {filteredHistories.map((history) => (

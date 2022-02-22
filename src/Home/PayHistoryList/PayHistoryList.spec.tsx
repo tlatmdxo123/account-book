@@ -1,6 +1,7 @@
 import { render } from "@testing-library/react";
 import { useSelector } from "react-redux";
 import { PayHistoryList } from ".";
+import { PayHistory } from "../../types/history";
 import { PayHistoryItemProps } from "./PayHistoryItem";
 
 jest.mock("react-redux", () => ({
@@ -57,5 +58,18 @@ describe("PayHistoryList", () => {
     expect(container.innerHTML).not.toMatch(
       `${payHistories[0].content} ${payHistories[0].amount}`
     );
+  });
+
+  describe("no payHistories", () => {
+    it("show empty message", () => {
+      const selectedDate = new Date(2020, 7).toString();
+      const payHistories: PayHistory[] = [];
+
+      useSelectorMock.mockImplementation((selector) =>
+        selector({ payHistories, selectedDate })
+      );
+      const { container } = render(<PayHistoryList />);
+      expect(container.innerHTML).toMatch("empty");
+    });
   });
 });
