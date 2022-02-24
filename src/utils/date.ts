@@ -13,10 +13,10 @@ export class FormatDate {
     return month.toString().padStart(2, "0");
   }
   getDay(): string {
-    return this.date.getDate().toString();
+    return this.date.getDate().toString().padStart(2, "0");
   }
-  getFullFormatedDate(): string {
-    return `${this.getYear()}.${this.getMonth()}.${this.getDay()}`;
+  getFullFormatedDate(divider: string): string {
+    return `${this.getYear()}${divider}${this.getMonth()}${divider}${this.getDay()}`;
   }
 }
 

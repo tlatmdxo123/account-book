@@ -36,7 +36,7 @@ describe("date utils", () => {
 
     describe("getFullFormatedDate", () => {
       it("returns full formated date", () => {
-        const formatedDate = date.getFullFormatedDate();
+        const formatedDate = date.getFullFormatedDate(".");
         expect(formatedDate).toBe("2022.02.21");
       });
     });
