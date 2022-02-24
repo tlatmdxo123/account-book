@@ -38,3 +38,5 @@ export const selectPayHistoriesAmountSum = (state: RootState) =>
   state.payHistories.map((history) => history.amount).reduce(sum);
 
 export const selectPayHistories = (state: RootState) => state.payHistories;
+export const selectPayHistory = (id: string) => (state: RootState) =>
+  state.payHistories.find((history) => history.id === id);

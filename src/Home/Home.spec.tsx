@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { Home } from ".";
 import { addHistory } from "../store/payHistories";
 import { usePayHistories } from "./usePayHistories";
+import { useQuery } from "./useQuery";
 
 jest.mock("./usePayHistories", () => ({ usePayHistories: jest.fn() }));
 jest.mock("./Header", () => ({ Header: () => <div>Header</div> }));
@@ -12,6 +13,10 @@ jest.mock("./PayHistoryList", () => ({
 jest.mock("./AddButton", () => ({ AddButton: () => <div>AddButton</div> }));
 jest.mock("react-redux", () => ({ useDispatch: jest.fn() }));
 jest.mock("../store/payHistories", () => ({ addHistory: jest.fn() }));
+jest.mock("./Modal", () => ({
+  Modal: ({ id }: { id?: string }) => (id ? <div>{id}</div> : <div>modal</div>),
+}));
+jest.mock("./useQuery", () => ({ useQuery: jest.fn() }));
 
 const usePayHistoriesMock = usePayHistories as jest.Mock<
   Partial<ReturnType<typeof usePayHistories>>
@@ -22,6 +27,9 @@ const useDispatchMock = useDispatch as unknown as jest.Mock<
 >;
 const addHistoryMock = addHistory as unknown as jest.Mock<
   Partial<ReturnType<typeof addHistory>>
+>;
+const useQueryMock = useQuery as unknown as jest.Mock<
+  Partial<ReturnType<typeof useQuery>>
 >;
 
 const dispatch = jest.fn();
@@ -40,10 +48,19 @@ const addHistoryAction = {
   payload: histories,
 };
 
+type Params = {
+  [key: string]: string;
+};
+
 describe("Home", () => {
   beforeEach(() => {
     useDispatchMock.mockReturnValue(dispatch);
     addHistoryMock.mockReturnValue(addHistoryAction);
+
+    const params: Params = {};
+    useQueryMock.mockReturnValue({
+      get: (key: string) => params[key],
+    });
   });
 
   describe("with error", () => {
@@ -95,11 +112,46 @@ describe("Home", () => {
     });
   });
 
-  describe("with url query 'open=true'", () => {
-    it.todo("show payHistory add Modal");
-  });
+  describe("Modal", () => {
+    beforeEach(() => {
+      usePayHistoriesMock.mockReturnValue({
+        payHistories: histories,
+        isLoading: false,
+        error: null,
+      });
+    });
+    describe("with no query", () => {
+      it("dont renders Modal", () => {
+        const { container } = renderWithRouter(() => <Home />, "/");
+        expect(container.innerHTML).not.toMatch("modal");
+      });
+    });
 
-  describe("with url query 'edit=true&id=payHistoryId'", () => {
-    it.todo("show payHistory add Modal with input complete");
+    describe("with url query 'open=true'", () => {
+      it("show payHistory Modal with no id", () => {
+        const params: Params = {
+          open: "true",
+        };
+        useQueryMock.mockReturnValue({
+          get: (key: string) => params[key],
+        });
+        const { container } = render(<Home />);
+        expect(container.innerHTML).toMatch("modal");
+      });
+    });
+
+    describe("with url query 'open=true&id=payHistoryId'", () => {
+      it("show payHistory Modal with id", () => {
+        const params: Params = {
+          open: "true",
+          id: "historyId",
+        };
+        useQueryMock.mockReturnValue({
+          get: (key: string) => params[key],
+        });
+        const { container } = render(<Home />);
+        expect(container.innerHTML).toMatch("historyId");
+      });
+    });
   });
 });

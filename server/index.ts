@@ -53,10 +53,9 @@ app.post("/histories/:historyId", (req, res) => {
 });
 
 app.post("/histories/new", (req, res) => {
-  db.get("payHistories")
-    .push({ ...req.body, id: nanoid() })
-    .write();
-  res.json({ success: true });
+  const history = { ...req.body, id: nanoid() };
+  db.get("payHistories").push(history).write();
+  res.json({ data: history });
 });
 
 app.delete("/histories/:historyId", (req, res) => {

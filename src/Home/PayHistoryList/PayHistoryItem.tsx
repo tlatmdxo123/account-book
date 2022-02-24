@@ -16,7 +16,7 @@ export const PayHistoryItem = ({ payHistory }: PayHistoryItemProps) => {
   }
 
   function onClickEdit(id: string) {
-    history.push(`?edit=true&id=${id}`);
+    history.push(`?open=true&id=${id}`);
   }
 
   const { id, content, amount, category } = payHistory;

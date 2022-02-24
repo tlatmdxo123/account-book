@@ -5,6 +5,7 @@ import {
   payHistories,
   selectPayHistories,
   selectPayHistoriesAmountSum,
+  selectPayHistory,
 } from ".";
 import { RootState } from "..";
 import { PayHistory } from "../../types/history";
@@ -28,7 +29,7 @@ describe("PayHistory Reducer", () => {
   it("delete list", () => {
     const previousState: PayHistory[] = [history];
 
-    expect(payHistories(previousState, deleteHistory(history.id))).toEqual([]);
+    expect(payHistories(previousState, deleteHistory(history.id!))).toEqual([]);
   });
 
   it("edit list", () => {
@@ -78,6 +79,17 @@ describe("PayHistory Reducer", () => {
     it("select pay histories", () => {
       const result = selectPayHistories({ payHistories } as RootState);
       expect(result).toEqual(payHistories);
+    });
+
+    it("select pay history", () => {
+      const result = selectPayHistory("a")({ payHistories } as RootState);
+      expect(result).toEqual({
+        id: "a",
+        amount: 4000,
+        content: "커피",
+        date: history.date,
+        category: "카페",
+      });
     });
   });
 });

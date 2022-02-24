@@ -57,13 +57,13 @@ describe("PayHistoryItem", () => {
   });
 
   describe("on click edit button", () => {
-    it("add query parameter '?edit=true&id'", () => {
+    it("add query parameter '?open=true&id'", () => {
       const { history } = renderWithRouter(() => (
         <PayHistoryItem payHistory={payHistory} />
       ));
 
       fireEvent.click(screen.getByText("수정"));
-      expect(history.location.search).toBe(`?edit=true&id=${payHistory.id}`);
+      expect(history.location.search).toBe(`?open=true&id=${payHistory.id}`);
     });
   });
 });
