@@ -1,8 +1,13 @@
 import {
-  addHistory,
-  deleteHistory,
-  editHistory,
+  addHistories,
+  addHistoryError,
+  addHistorySuccess,
+  deleteHistoryError,
+  deleteHistorySuccess,
+  editHistoryError,
+  editHistorySuccess,
   payHistories,
+  PayHistoriesState,
   selectPayHistories,
   selectPayHistoriesAmountSum,
   selectPayHistory,
@@ -18,22 +23,76 @@ describe("PayHistory Reducer", () => {
     date: new Date().toString(),
     category: "카페",
   };
-  it("add list", () => {
-    const previousState: PayHistory[] = [];
+  it("add histories", () => {
+    const previousState: PayHistoriesState = {
+      error: null,
+      data: [],
+    };
 
-    expect(payHistories(previousState, addHistory([history]))).toEqual([
-      history,
-    ]);
+    expect(payHistories(previousState, addHistories([history]))).toEqual({
+      error: null,
+      data: [history],
+    });
   });
 
-  it("delete list", () => {
-    const previousState: PayHistory[] = [history];
+  it("add history success", () => {
+    const previousState: PayHistoriesState = {
+      error: null,
+      data: [],
+    };
 
-    expect(payHistories(previousState, deleteHistory(history.id!))).toEqual([]);
+    expect(payHistories(previousState, addHistorySuccess(history))).toEqual({
+      error: null,
+      data: [history],
+    });
   });
 
-  it("edit list", () => {
-    const previousState: PayHistory[] = [history];
+  it("add history error", () => {
+    const error = "error";
+    const previousState: PayHistoriesState = {
+      error: null,
+      data: [],
+    };
+
+    expect(payHistories(previousState, addHistoryError(error))).toEqual({
+      error,
+      data: [],
+    });
+  });
+
+  it("delete history success", () => {
+    const previousState: PayHistoriesState = {
+      error: null,
+      data: [history],
+    };
+
+    expect(
+      payHistories(previousState, deleteHistorySuccess(history.id!))
+    ).toEqual({
+      error: null,
+      data: [],
+    });
+  });
+
+  it("delete history error", () => {
+    const error = "error";
+    const previousState: PayHistoriesState = {
+      error: null,
+      data: [history],
+    };
+
+    expect(payHistories(previousState, deleteHistoryError(error))).toEqual({
+      error,
+      data: [history],
+    });
+  });
+
+  it("edit history success", () => {
+    const previousState: PayHistoriesState = {
+      error: null,
+      data: [history],
+    };
+
     const editedHistory: PayHistory = {
       id: "a",
       amount: 4000,
@@ -42,35 +101,55 @@ describe("PayHistory Reducer", () => {
       category: "카페",
     };
 
-    expect(payHistories(previousState, editHistory(editedHistory))).toEqual([
-      editedHistory,
-    ]);
+    expect(
+      payHistories(previousState, editHistorySuccess(editedHistory))
+    ).toEqual({
+      error: null,
+      data: [editedHistory],
+    });
+  });
+
+  it("edit history error", () => {
+    const previousState: PayHistoriesState = {
+      error: null,
+      data: [history],
+    };
+
+    const error = "error";
+
+    expect(payHistories(previousState, editHistoryError(error))).toEqual({
+      error,
+      data: [history],
+    });
   });
 
   describe("selectors", () => {
-    const payHistories: PayHistory[] = [
-      {
-        id: "a",
-        amount: 4000,
-        content: "커피",
-        date: history.date,
-        category: "카페",
-      },
-      {
-        id: "b",
-        amount: 5200,
-        content: "커피",
-        date: history.date,
-        category: "카페",
-      },
-      {
-        id: "c",
-        amount: 3000,
-        content: "커피",
-        date: history.date,
-        category: "카페",
-      },
-    ];
+    const payHistories: PayHistoriesState = {
+      error: null,
+      data: [
+        {
+          id: "a",
+          amount: 4000,
+          content: "커피",
+          date: history.date,
+          category: "카페",
+        },
+        {
+          id: "b",
+          amount: 5200,
+          content: "커피",
+          date: history.date,
+          category: "카페",
+        },
+        {
+          id: "c",
+          amount: 3000,
+          content: "커피",
+          date: history.date,
+          category: "카페",
+        },
+      ],
+    };
     it("select pay histories amount sum", () => {
       const sum = selectPayHistoriesAmountSum({ payHistories } as RootState);
       expect(sum).toBe(12200);
