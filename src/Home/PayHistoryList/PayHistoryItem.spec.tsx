@@ -43,7 +43,7 @@ describe("PayHistoryItem", () => {
       const dispatch = jest.fn();
       const deleteAction = {
         type: "deleteHistory",
-        payload: payHistory.id,
+        payload: payHistory.id!,
       };
 
       useDispatchMock.mockReturnValue(dispatch);

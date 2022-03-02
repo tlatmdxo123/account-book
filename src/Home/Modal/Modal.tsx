@@ -42,7 +42,7 @@ export const Modal = ({ id = "" }: Props) => {
       category,
       date,
     };
-    dispatch(addHistory([newHistory]));
+    dispatch(addHistory(newHistory));
   }
 
   function resetForm() {

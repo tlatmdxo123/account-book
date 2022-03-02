@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addHistory } from "../store/payHistories";
+import { addHistories } from "../store/payHistories";
 import { AddButton } from "./AddButton";
 import { Header } from "./Header";
 import { Modal } from "./Modal";
@@ -16,7 +16,7 @@ export const Home = () => {
 
   useEffect(() => {
     if (payHistories.length) {
-      dispatch(addHistory(payHistories));
+      dispatch(addHistories(payHistories));
     }
   }, [payHistories]);
 

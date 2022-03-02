@@ -27,8 +27,8 @@ export const PayHistoryItem = ({ payHistory }: PayHistoryItemProps) => {
         <div>#{category}</div>
       </div>
       <div>
-        <button onClick={() => onClickEdit(id)}>수정</button>
-        <button onClick={() => onClickDelete(id)}>삭제</button>
+        <button onClick={() => onClickEdit(id!)}>수정</button>
+        <button onClick={() => onClickDelete(id!)}>삭제</button>
       </div>
       <span>-{amount.toLocaleString("ko-KR")}원</span>
     </li>

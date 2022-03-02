@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { useDispatch, useSelector } from "react-redux";
 import { Modal } from ".";
-import { addHistory } from "../../store/payHistories";
+import { addHistory, PayHistoriesState } from "../../store/payHistories";
 import { FormatDate } from "../../utils/date";
 
 jest.mock("react-redux", () => ({
@@ -33,22 +33,25 @@ const dispatch = jest.fn();
 
 describe("Modal", () => {
   beforeEach(() => {
-    const payHistories = [
-      {
-        id: "a",
-        amount: 10000,
-        date: new Date(2021, 4).toString(),
-        category: "식사",
-        content: "김치삼겹살",
-      },
-      {
-        id: "b",
-        amount: 5100,
-        date: new Date().toString(),
-        category: "카페",
-        content: "이디야",
-      },
-    ];
+    const payHistories: PayHistoriesState = {
+      error: null,
+      data: [
+        {
+          id: "a",
+          amount: 10000,
+          date: new Date(2021, 4).toString(),
+          category: "식사",
+          content: "김치삼겹살",
+        },
+        {
+          id: "b",
+          amount: 5100,
+          date: new Date().toString(),
+          category: "카페",
+          content: "이디야",
+        },
+      ],
+    };
     useSelectorMock.mockImplementation((selector) =>
       selector({ payHistories })
     );
@@ -91,14 +94,13 @@ describe("Modal", () => {
   });
   describe("on click ok button", () => {
     it("dispatch addHistory with history info", () => {
-      const payload = [
-        {
-          amount: 20000,
-          date: "2021-04-21",
-          category: "식사",
-          content: "김치삼겹살",
-        },
-      ];
+      const payload = {
+        amount: 20000,
+        date: "2021-04-21",
+        category: "식사",
+        content: "김치삼겹살",
+      };
+
       const addHistoryAction = {
         type: "addHistory",
         payload,

@@ -55,7 +55,7 @@ app.post("/histories/:historyId", (req, res) => {
 app.post("/histories/new", (req, res) => {
   const history = { ...req.body, id: nanoid() };
   db.get("payHistories").push(history).write();
-  res.json({ data: history });
+  res.json(history);
 });
 
 app.delete("/histories/:historyId", (req, res) => {

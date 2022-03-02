@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { useDispatch } from "react-redux";
 import { Home } from ".";
-import { addHistory } from "../store/payHistories";
+import { addHistories, addHistory } from "../store/payHistories";
 import { usePayHistories } from "./usePayHistories";
 import { useQuery } from "./useQuery";
 
@@ -12,7 +12,7 @@ jest.mock("./PayHistoryList", () => ({
 }));
 jest.mock("./AddButton", () => ({ AddButton: () => <div>AddButton</div> }));
 jest.mock("react-redux", () => ({ useDispatch: jest.fn() }));
-jest.mock("../store/payHistories", () => ({ addHistory: jest.fn() }));
+jest.mock("../store/payHistories", () => ({ addHistories: jest.fn() }));
 jest.mock("./Modal", () => ({
   Modal: ({ id }: { id?: string }) => (id ? <div>{id}</div> : <div>modal</div>),
 }));
@@ -25,8 +25,8 @@ const usePayHistoriesMock = usePayHistories as jest.Mock<
 const useDispatchMock = useDispatch as unknown as jest.Mock<
   Partial<ReturnType<typeof useDispatch>>
 >;
-const addHistoryMock = addHistory as unknown as jest.Mock<
-  Partial<ReturnType<typeof addHistory>>
+const addHistoriesMock = addHistories as unknown as jest.Mock<
+  Partial<ReturnType<typeof addHistories>>
 >;
 const useQueryMock = useQuery as unknown as jest.Mock<
   Partial<ReturnType<typeof useQuery>>
@@ -55,7 +55,7 @@ type Params = {
 describe("Home", () => {
   beforeEach(() => {
     useDispatchMock.mockReturnValue(dispatch);
-    addHistoryMock.mockReturnValue(addHistoryAction);
+    addHistoriesMock.mockReturnValue(addHistoryAction);
 
     const params: Params = {};
     useQueryMock.mockReturnValue({
