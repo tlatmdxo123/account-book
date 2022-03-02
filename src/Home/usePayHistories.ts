@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { PayHistory } from "../types/history";
-import { getPayHistories } from "../utils/api";
+import { fetchHistories } from "../store/payHistories/api";
+import { AxiosResponse } from "axios";
 
 export const usePayHistories = () => {
   const [payHistories, setPayHistories] = useState<PayHistory[]>([]);
@@ -8,17 +9,17 @@ export const usePayHistories = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    async function fetchHistories() {
+    async function getHistories() {
       setIsLoading(true);
       try {
-        const result = await getPayHistories();
-        setPayHistories(result);
+        const result: AxiosResponse<PayHistory[]> = await fetchHistories();
+        setPayHistories(result.data);
       } catch (error) {
         setError((error as Error).message);
       }
       setIsLoading(false);
     }
-    fetchHistories();
+    getHistories();
   }, []);
 
   return { payHistories, error, isLoading };

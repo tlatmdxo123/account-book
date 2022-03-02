@@ -1,19 +1,20 @@
 import { act, renderHook } from "@testing-library/react-hooks";
-import { getPayHistories } from "../utils/api";
+import { AxiosResponse } from "axios";
+import { fetchHistories } from "../store/payHistories/api";
 import { usePayHistories } from "./usePayHistories";
 
-jest.mock("../utils/api", () => ({
-  getPayHistories: jest.fn(),
+jest.mock("../store/payHistories/api", () => ({
+  fetchHistories: jest.fn(),
 }));
 
-const getPayHistoriesMock = getPayHistories as unknown as jest.Mock<
-  ReturnType<typeof getPayHistories>
+const fetchHistoriesMock = fetchHistories as unknown as jest.Mock<
+  Partial<ReturnType<typeof fetchHistories>>
 >;
 
 describe("usePayHistories", () => {
   describe("while waiting API response", () => {
     it("returns loading state", () => {
-      getPayHistoriesMock.mockReturnValue(new Promise(() => {}));
+      fetchHistoriesMock.mockReturnValue(new Promise(() => {}));
       const { result } = renderHook(() => usePayHistories());
 
       expect(result.current.isLoading).toBe(true);
@@ -24,7 +25,7 @@ describe("usePayHistories", () => {
 
   describe("with error", () => {
     it("returns error message", async () => {
-      getPayHistoriesMock.mockReturnValue(
+      fetchHistoriesMock.mockReturnValue(
         new Promise((res, rej) => {
           rej({ message: "Error" });
         })
@@ -50,9 +51,9 @@ describe("usePayHistories", () => {
           content: "김치삼겹살",
         },
       ];
-      getPayHistoriesMock.mockReturnValue(
+      fetchHistoriesMock.mockReturnValue(
         new Promise((res, rej) => {
-          res(histories);
+          res({ data: histories } as AxiosResponse);
         })
       );
       const { result, waitForNextUpdate } = renderHook(() => usePayHistories());
