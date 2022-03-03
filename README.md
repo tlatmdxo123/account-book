@@ -61,10 +61,28 @@
 
 ## 기술스택
 
+### 클라이언트
+
 - `react`
 - `redux` : 전역 상태 관리
 - `redux-saga` : 리스트 저장하고 불러오는 비동기처리를 위해 사용
 - `redux-logger` : 리덕스 디버깅
 - `typescript` : 정적 타입 체크
-- `jest` : 테스트
 - `css-in-css` : css파일을 모듈로 관리
+
+### 서버
+
+- `lowdb` : json db생성
+- `express` : rest API 처리
+- `cors` : cors문제 해결
+- `body-parser` : 데이터 파싱
+- `nanoid` : 랜덤 id 생성
+- `concurrently` : 서버와 클라이언트 동시 실행
+
+### 테스트
+
+- `jest` : 전체 테스트
+- `@testing-library/react` : component rendering test
+- `history` : routing test
+- `@testing-library/react-hooks` : react hook test
+- `redux-saga-test-plan` : redux-saga test
