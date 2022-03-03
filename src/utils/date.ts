@@ -23,14 +23,14 @@ export class FormatDate {
 export function getDateLists(fromDate: Date, toDate: Date) {
   const dateLists: DateString[] = [];
 
-  for (let y = fromDate.getFullYear(); y < toDate.getFullYear(); y++) {
-    for (let m = 0; m < 12; m++) {
-      dateLists.push(new Date(y, m).toString());
-    }
+  for (let m = toDate.getMonth(); m >= 0; m--) {
+    dateLists.push(new Date(toDate.getFullYear(), m).toString());
   }
 
-  for (let m = 0; m <= toDate.getMonth(); m++) {
-    dateLists.push(new Date(toDate.getFullYear(), m).toString());
+  for (let y = toDate.getFullYear() - 1; y >= fromDate.getFullYear(); y--) {
+    for (let m = 11; m >= 0; m--) {
+      dateLists.push(new Date(y, m).toString());
+    }
   }
 
   return dateLists;

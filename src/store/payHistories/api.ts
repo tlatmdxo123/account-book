@@ -1,5 +1,5 @@
 import { PayHistory } from "../../types/history";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { SERVER_URL } from "../../constants";
 
 const instance = axios.create({
@@ -11,7 +11,6 @@ export function fetchHistories() {
 }
 
 export function fetchAddHistory(payHistory: PayHistory) {
-  console.log(payHistory);
   return instance.post(SERVER_URL + "/histories/new", payHistory);
 }
 

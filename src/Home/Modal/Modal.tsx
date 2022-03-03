@@ -3,7 +3,11 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { FROM_DATE } from "../../constants";
-import { addHistory, selectPayHistory } from "../../store/payHistories";
+import {
+  addHistory,
+  editHistory,
+  selectPayHistory,
+} from "../../store/payHistories";
 import { FormatDate } from "../../utils/date";
 import { CATEGORY_LIST } from "./category";
 
@@ -43,6 +47,19 @@ export const Modal = ({ id = "" }: Props) => {
       date,
     };
     dispatch(addHistory(newHistory));
+    urlHistory.push("/");
+  }
+
+  function onClickEditHistory() {
+    const newHistory = {
+      id,
+      content,
+      amount: +amount,
+      category,
+      date,
+    };
+
+    dispatch(editHistory(newHistory));
     urlHistory.push("/");
   }
 
@@ -101,10 +118,10 @@ export const Modal = ({ id = "" }: Props) => {
       <div>
         <button
           type="button"
-          onClick={onClickAddHistory}
+          onClick={id ? onClickEditHistory : onClickAddHistory}
           disabled={isNotFormComplete()}
         >
-          추가
+          {id ? "수정" : "추가"}
         </button>
         <button type="button" onClick={onClickCancelModal}>
           취소

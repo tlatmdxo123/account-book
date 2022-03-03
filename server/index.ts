@@ -44,7 +44,6 @@ app.post("/histories/new", (req, res) => {
 
 app.post("/histories/:historyId", (req, res) => {
   const { historyId } = req.params;
-  console.log("edit");
   const edited = { ...req.body };
   db.get("payHistories").find({ id: historyId }).assign(edited).write();
   res.json(edited);
