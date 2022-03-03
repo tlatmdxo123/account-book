@@ -11,6 +11,7 @@ export function fetchHistories() {
 }
 
 export function fetchAddHistory(payHistory: PayHistory) {
+  console.log(payHistory);
   return instance.post(SERVER_URL + "/histories/new", payHistory);
 }
 

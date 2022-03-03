@@ -1,6 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
-import { call, put, takeEvery } from "redux-saga/effects";
+import { all, call, put, takeEvery } from "redux-saga/effects";
 import {
   addHistory,
   addHistoryError,
@@ -52,4 +52,8 @@ export function* watchEditHistory() {
 
 export function* watchDeleteHistory() {
   yield takeEvery(deleteHistory.type, fetchDeleteHistorySaga);
+}
+
+export function* productHistoriesSaga() {
+  yield all([watchAddHistory(), watchEditHistory(), watchDeleteHistory()]);
 }
