@@ -47,20 +47,20 @@ describe("date utils", () => {
       const from = new Date(2021, 0);
       const to = new Date(2022, 1);
       const dateLists = [
-        new Date(2021, 0).toString(),
-        new Date(2021, 1).toString(),
-        new Date(2021, 2).toString(),
-        new Date(2021, 3).toString(),
-        new Date(2021, 4).toString(),
-        new Date(2021, 5).toString(),
-        new Date(2021, 6).toString(),
-        new Date(2021, 7).toString(),
-        new Date(2021, 8).toString(),
-        new Date(2021, 9).toString(),
-        new Date(2021, 10).toString(),
-        new Date(2021, 11).toString(),
-        new Date(2022, 0).toString(),
         new Date(2022, 1).toString(),
+        new Date(2022, 0).toString(),
+        new Date(2021, 11).toString(),
+        new Date(2021, 10).toString(),
+        new Date(2021, 9).toString(),
+        new Date(2021, 8).toString(),
+        new Date(2021, 7).toString(),
+        new Date(2021, 6).toString(),
+        new Date(2021, 5).toString(),
+        new Date(2021, 4).toString(),
+        new Date(2021, 3).toString(),
+        new Date(2021, 2).toString(),
+        new Date(2021, 1).toString(),
+        new Date(2021, 0).toString(),
       ];
 
       const result = getDateLists(from, to);
