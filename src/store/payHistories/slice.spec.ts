@@ -151,13 +151,16 @@ describe("PayHistory Reducer", () => {
       ],
     };
     it("select pay histories amount sum", () => {
-      const sum = selectPayHistoriesAmountSum({ payHistories } as RootState);
+      const sum = selectPayHistoriesAmountSum({
+        payHistories,
+        selectedDate: history.date,
+      } as RootState);
       expect(sum).toBe(12200);
     });
 
     it("select pay histories", () => {
       const result = selectPayHistories({ payHistories } as RootState);
-      expect(result).toEqual(payHistories);
+      expect(result).toEqual(payHistories.data);
     });
 
     it("select pay history", () => {

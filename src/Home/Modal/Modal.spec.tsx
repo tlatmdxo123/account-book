@@ -107,7 +107,7 @@ describe("Modal", () => {
       };
       addHistoryMock.mockReturnValue(addHistoryAction);
 
-      render(<Modal />);
+      renderWithRouter(() => <Modal />, "/");
       fireEvent.change(screen.getByLabelText("내용"), {
         target: { value: "김치삼겹살" },
       });
@@ -125,6 +125,10 @@ describe("Modal", () => {
       expect(addHistory).toHaveBeenCalledWith(payload);
       expect(dispatch).toHaveBeenCalledWith(addHistoryAction);
     });
+    it("reset form", () => {
+      renderWithRouter(() => <Modal />, "/");
+      checkReset();
+    });
   });
 
   describe("on click cancel button", () => {
@@ -134,28 +138,32 @@ describe("Modal", () => {
       expect(history.location.search).toBe("");
     });
     it("reset input", () => {
-      const currentDate = new FormatDate(new Date().toString());
       renderWithRouter(() => <Modal />, "?open=true");
-      fireEvent.change(screen.getByLabelText("내용"), {
-        target: { value: "김치삼겹살" },
-      });
-      fireEvent.change(screen.getByLabelText("카테고리"), {
-        target: { value: "식사" },
-      });
-      fireEvent.change(screen.getByLabelText("날짜"), {
-        target: { value: "2021-04-21" },
-      });
-      fireEvent.change(screen.getByLabelText("소비금액"), {
-        target: { value: "20000" },
-      });
-
-      fireEvent.click(screen.getByText("취소"));
-      expect(screen.getByLabelText("내용")).not.toHaveValue();
-      expect(screen.getByLabelText("카테고리")).not.toHaveValue();
-      expect(screen.getByLabelText("날짜")).toHaveValue(
-        currentDate.getFullFormatedDate("-")
-      );
-      expect(screen.getByLabelText("소비금액")).not.toHaveValue();
+      checkReset();
     });
   });
 });
+
+function checkReset() {
+  const currentDate = new FormatDate(new Date().toString());
+  fireEvent.change(screen.getByLabelText("내용"), {
+    target: { value: "김치삼겹살" },
+  });
+  fireEvent.change(screen.getByLabelText("카테고리"), {
+    target: { value: "식사" },
+  });
+  fireEvent.change(screen.getByLabelText("날짜"), {
+    target: { value: "2021-04-21" },
+  });
+  fireEvent.change(screen.getByLabelText("소비금액"), {
+    target: { value: "20000" },
+  });
+
+  fireEvent.click(screen.getByText("취소"));
+  expect(screen.getByLabelText("내용")).not.toHaveValue();
+  expect(screen.getByLabelText("카테고리")).not.toHaveValue();
+  expect(screen.getByLabelText("날짜")).toHaveValue(
+    currentDate.getFullFormatedDate("-")
+  );
+  expect(screen.getByLabelText("소비금액")).not.toHaveValue();
+}

@@ -43,6 +43,7 @@ export const Modal = ({ id = "" }: Props) => {
       date,
     };
     dispatch(addHistory(newHistory));
+    urlHistory.push("/");
   }
 
   function resetForm() {

@@ -2,6 +2,7 @@ import { PayHistory } from "../../types/history";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "..";
 import { sum } from "../../utils/helpers";
+import { isSameYearAndMonth } from "../../utils/date";
 
 export type PayHistoriesState = {
   error: string | null;
@@ -92,8 +93,11 @@ export const {
   addHistories,
 } = slice.actions;
 export const selectPayHistoriesAmountSum = (state: RootState) =>
-  state.payHistories.data.map((history) => history.amount).reduce(sum);
+  state.payHistories.data
+    .filter((history) => isSameYearAndMonth(history.date, state.selectedDate))
+    .map((history) => history.amount)
+    .reduce(sum, 0);
 
-export const selectPayHistories = (state: RootState) => state.payHistories;
+export const selectPayHistories = (state: RootState) => state.payHistories.data;
 export const selectPayHistory = (id: string) => (state: RootState) =>
   state.payHistories.data.find((history) => history.id === id);

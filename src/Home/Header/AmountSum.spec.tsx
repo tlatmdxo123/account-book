@@ -1,5 +1,6 @@
 import { render } from "@testing-library/react";
 import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 import { PayHistoriesState } from "../../store/payHistories";
 import { PayHistory } from "../../types/history";
 import { AmountSum } from "./AmountSum";
@@ -41,7 +42,10 @@ describe("AmountSum", () => {
       ],
     };
     useSelectorMock.mockImplementation((selector) =>
-      selector({ payHistories })
+      selector({
+        payHistories,
+        selectedDate: new Date().toString(),
+      } as RootState)
     );
     const { container } = render(<AmountSum />);
 

@@ -1,11 +1,11 @@
 {
   "payHistories": [
     {
-      "id": "QTrqJmqo4PIBo-aC5K2gO",
-      "amount": 10000,
-      "date": "Tue Feb 22 2022 13:16:00 GMT+0900 (대한민국 표준시)",
+      "content": "test7",
+      "amount": 100000,
       "category": "식사",
-      "content": "김치삼겹살"
+      "date": "2022-03-02",
+      "id": "sMjtw7FBb7s-9WTJ3kz2W"
     }
   ]
 }
