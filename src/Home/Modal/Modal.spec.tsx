@@ -1,8 +1,10 @@
-import { fireEvent, render, screen } from "@testing-library/react";
 import { useDispatch, useSelector } from "react-redux";
-import { Modal } from ".";
-import { addHistory, PayHistoriesState } from "../../store/payHistories";
-import { FormatDate } from "../../utils/date";
+import {
+  addHistory,
+  editHistory,
+  PayHistoriesState,
+} from "../../store/payHistories";
+import { renderModal } from "./testUtils";
 
 jest.mock("react-redux", () => ({
   useSelector: jest.fn(),
@@ -16,6 +18,7 @@ jest.mock("../../store/payHistories", () => {
     __esModule: true,
     ...originalModule,
     addHistory: jest.fn(),
+    editHistory: jest.fn(),
   };
 });
 
@@ -28,30 +31,34 @@ const useDispatchMock = useDispatch as unknown as jest.Mock<
 const addHistoryMock = addHistory as unknown as jest.Mock<
   ReturnType<typeof addHistory>
 >;
+const editHistoryMock = editHistory as unknown as jest.Mock<
+  ReturnType<typeof editHistory>
+>;
 
 const dispatch = jest.fn();
 
 describe("Modal", () => {
+  const payHistories: PayHistoriesState = {
+    error: null,
+    data: [
+      {
+        id: "a",
+        amount: 10000,
+        date: new Date(2021, 4).toString(),
+        category: "식사",
+        content: "김치삼겹살",
+      },
+      {
+        id: "b",
+        amount: 5100,
+        date: new Date().toString(),
+        category: "카페",
+        content: "이디야",
+      },
+    ],
+  };
+
   beforeEach(() => {
-    const payHistories: PayHistoriesState = {
-      error: null,
-      data: [
-        {
-          id: "a",
-          amount: 10000,
-          date: new Date(2021, 4).toString(),
-          category: "식사",
-          content: "김치삼겹살",
-        },
-        {
-          id: "b",
-          amount: 5100,
-          date: new Date().toString(),
-          category: "카페",
-          content: "이디야",
-        },
-      ],
-    };
     useSelectorMock.mockImplementation((selector) =>
       selector({ payHistories })
     );
@@ -59,111 +66,118 @@ describe("Modal", () => {
   });
 
   describe("with no id", () => {
-    it("renders empty inputs", async () => {
-      const currentDate = new FormatDate(new Date().toString());
-      render(<Modal />);
-      expect(screen.getByLabelText("내용")).not.toHaveValue();
-      expect(screen.getByLabelText("카테고리")).not.toHaveValue();
-      expect(screen.getByLabelText("날짜")).toHaveValue(
-        currentDate.getFullFormatedDate("-")
-      );
-      expect(screen.getByLabelText("소비금액")).not.toHaveValue();
-      expect(screen.getByText("추가")).toBeInTheDocument();
-      expect(screen.getByText("취소")).toBeInTheDocument();
+    it("renders empty inputs", () => {
+      const { checkIsAllEmpty, AddButton, CancelButton } = renderModal();
+      checkIsAllEmpty();
+      expect(AddButton).toBeInTheDocument();
+      expect(CancelButton).toBeInTheDocument();
     });
-  });
-  describe("with id", () => {
-    it("renders inputs with content", () => {
-      const currentDate = new FormatDate(new Date(2021, 4).toString());
-      render(<Modal id="a" />);
-      expect(screen.getByLabelText("내용")).toHaveValue("김치삼겹살");
-      expect(screen.getByLabelText("카테고리")).toHaveValue("식사");
-      expect(screen.getByLabelText("날짜")).toHaveValue(
-        currentDate.getFullFormatedDate("-")
-      );
-      expect(screen.getByLabelText("소비금액")).toHaveValue("10000");
-      expect(screen.getByText("추가")).toBeInTheDocument();
-      expect(screen.getByText("취소")).toBeInTheDocument();
-    });
-  });
-  describe("when empty input", () => {
-    it("disable ok button", () => {
-      render(<Modal />);
-      expect(screen.getByText("추가")).toHaveAttribute("disabled");
-    });
-  });
-  describe("on click ok button", () => {
-    it("dispatch addHistory with history info", () => {
+
+    describe("on click ok button", () => {
       const payload = {
         amount: 20000,
         date: "2021-04-21",
         category: "식사",
         content: "김치삼겹살",
       };
-
-      const addHistoryAction = {
-        type: "addHistory",
-        payload,
-      };
-      addHistoryMock.mockReturnValue(addHistoryAction);
-
-      renderWithRouter(() => <Modal />, "/");
-      fireEvent.change(screen.getByLabelText("내용"), {
-        target: { value: "김치삼겹살" },
-      });
-      fireEvent.change(screen.getByLabelText("카테고리"), {
-        target: { value: "식사" },
-      });
-      fireEvent.change(screen.getByLabelText("날짜"), {
-        target: { value: "2021-04-21" },
-      });
-      fireEvent.change(screen.getByLabelText("소비금액"), {
-        target: { value: "20000" },
+      it("dispatch addHistory with history info", () => {
+        const addHistoryAction = {
+          type: "addHistory",
+          payload,
+        };
+        addHistoryMock.mockReturnValue(addHistoryAction);
+        const { fillAllInput, clickAddButton } = renderModal();
+        fillAllInput(payload);
+        clickAddButton();
+        expect(addHistory).toHaveBeenCalledWith(payload);
+        expect(dispatch).toHaveBeenCalledWith(addHistoryAction);
       });
 
-      fireEvent.click(screen.getByText("추가"));
-      expect(addHistory).toHaveBeenCalledWith(payload);
-      expect(dispatch).toHaveBeenCalledWith(addHistoryAction);
+      it("reset form", () => {
+        const { fillAllInput, clickAddButton, checkIsAllEmpty } = renderModal();
+        fillAllInput(payload);
+        clickAddButton();
+        checkIsAllEmpty();
+      });
     });
-    it("reset form", () => {
-      renderWithRouter(() => <Modal />, "/");
-      checkReset();
+  });
+
+  describe("with id", () => {
+    it("renders inputs with content", () => {
+      const { checkValue, EditButton, CancelButton } = renderModal(
+        { id: "a" },
+        "?open=true&id=a"
+      );
+      checkValue({
+        amount: 10000,
+        date: "2021-05-01",
+        category: "식사",
+        content: "김치삼겹살",
+      });
+      expect(EditButton).toBeInTheDocument();
+      expect(CancelButton).toBeInTheDocument();
+    });
+
+    dispatch("on click ok button", () => {
+      it("dispatch edit history with history info", () => {
+        const value = {
+          amount: 20000,
+          date: "2021-04-21",
+          category: "식사",
+          content: "김치삼겹살",
+        };
+        const payload = {
+          id: "a",
+          ...value,
+        };
+
+        const editHistoryAction = {
+          type: "editHistory",
+          payload,
+        };
+
+        editHistoryMock.mockReturnValue(editHistoryAction);
+
+        const { fillAllInput, clickAddButton } = renderModal(
+          { id: "a" },
+          "?open=true&id=a"
+        );
+
+        fillAllInput(value);
+        clickAddButton();
+
+        expect(editHistory).toBeCalledWith(value);
+      });
+    });
+  });
+
+  describe("when empty input", () => {
+    it("disable ok button", () => {
+      const { AddButton } = renderModal();
+      expect(AddButton).toHaveAttribute("disabled");
     });
   });
 
   describe("on click cancel button", () => {
     it("route to '/'", () => {
-      const { history } = renderWithRouter(() => <Modal />, "?open=true");
-      fireEvent.click(screen.getByText("취소"));
-      expect(history.location.search).toBe("");
+      const { clickCancelButton, getCurrentQueryParams } = renderModal(
+        { id: undefined },
+        "?open=true"
+      );
+      clickCancelButton();
+      expect(getCurrentQueryParams()).toBe("");
     });
     it("reset input", () => {
-      renderWithRouter(() => <Modal />, "?open=true");
-      checkReset();
+      const { clickCancelButton, fillAllInput, checkIsAllEmpty } =
+        renderModal();
+      fillAllInput({
+        content: "김치삼겹살",
+        category: "식사",
+        date: "2021-04-21",
+        amount: 20000,
+      });
+      clickCancelButton();
+      checkIsAllEmpty();
     });
   });
 });
-
-function checkReset() {
-  const currentDate = new FormatDate(new Date().toString());
-  fireEvent.change(screen.getByLabelText("내용"), {
-    target: { value: "김치삼겹살" },
-  });
-  fireEvent.change(screen.getByLabelText("카테고리"), {
-    target: { value: "식사" },
-  });
-  fireEvent.change(screen.getByLabelText("날짜"), {
-    target: { value: "2021-04-21" },
-  });
-  fireEvent.change(screen.getByLabelText("소비금액"), {
-    target: { value: "20000" },
-  });
-
-  fireEvent.click(screen.getByText("취소"));
-  expect(screen.getByLabelText("내용")).not.toHaveValue();
-  expect(screen.getByLabelText("카테고리")).not.toHaveValue();
-  expect(screen.getByLabelText("날짜")).toHaveValue(
-    currentDate.getFullFormatedDate("-")
-  );
-  expect(screen.getByLabelText("소비금액")).not.toHaveValue();
-}

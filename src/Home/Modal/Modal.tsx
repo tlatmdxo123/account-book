@@ -11,7 +11,7 @@ import {
 import { FormatDate } from "../../utils/date";
 import { CATEGORY_LIST } from "./category";
 
-type Props = {
+export type Props = {
   id?: string;
 };
 
@@ -47,6 +47,7 @@ export const Modal = ({ id = "" }: Props) => {
       date,
     };
     dispatch(addHistory(newHistory));
+    resetForm();
     urlHistory.push("/");
   }
 
@@ -60,6 +61,7 @@ export const Modal = ({ id = "" }: Props) => {
     };
 
     dispatch(editHistory(newHistory));
+    resetForm();
     urlHistory.push("/");
   }
 
